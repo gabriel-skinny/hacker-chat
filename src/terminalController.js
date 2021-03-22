@@ -25,6 +25,7 @@ export default class TerminalController {
       eventEmitter.emit(constants.events.app.MESSAGE_RECEIVED, { message, userName: 'Gabriel'})
       eventEmitter.emit(constants.events.app.ACTIVITYLOG_UPDATED, "Gabriel left")
       eventEmitter.emit(constants.events.app.STATUS_UPDATED, ["Gabriel", "João", "Pedro"])
+      
       this.clearValue()
     }
   }
@@ -48,7 +49,12 @@ export default class TerminalController {
   }
 
   #onStatusChanged({ status, screen}) {
+  
     return users => {
+      const { content } = status.items.shift()
+      status.clearItems()
+      status.addItem(content)
+
       users.forEach(user => {
         const userColor = this.#getUserCollor(user)
         status.addItem(`{${userColor}} {bold}${user}{/}`)
